@@ -9,7 +9,12 @@ const cheerio = require("cheerio");
 
 const app = express();
 
-app.use(cors())
+var corsOptions = {
+    origin: 'http://localhost:63342',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
+app.use(cors(corsOptions))
 app.use(express.json())
 
 app.get('/all_news', (req, res) => {

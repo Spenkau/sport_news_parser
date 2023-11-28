@@ -1,4 +1,4 @@
-const URL = 'http://localhost:3000';
+const URL = 'https://sportnewsparser-production.up.railway.app';
 const searchBtn = document.getElementById('search_btn')
 const newsBlock = document.getElementById('news');
 
@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
 })
 
 document.addEventListener('click', (event) => {
-    console.log('click')
     if (event.target.matches('.news_category')) {
         event.preventDefault();
 

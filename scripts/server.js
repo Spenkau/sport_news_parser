@@ -1,5 +1,3 @@
-// const url = 'https://www.google.com/search?q=%D1%81%D0%BF%D0%BE%D1%80%D1%82%D0%B8%D0%B2%D0%BD%D1%8B%D0%B5+%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8&sca_esv=585680499&bih=931&biw=1920&hl=ru&tbm=nws&sxsrf=AM9HkKncbemEBmQ3aKdmTnEj4FxE54N7iA%3A1701111439215&ei=j-ZkZbPODO3i7_UPwOS5UA&ved=0ahUKEwjz0br47eSCAxVt8bsIHUByDgoQ4dUDCA0&uact=5&oq=%D1%81%D0%BF%D0%BE%D1%80%D1%82%D0%B8%D0%B2%D0%BD%D1%8B%D0%B5+%D0%BD%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%B8&gs_lp=Egxnd3Mtd2l6LW5ld3MiI9GB0L_QvtGA0YLQuNCy0L3Ri9C1INC90L7QstC-0YHRgtC4MgsQABiABBixAxiDATIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABDIFEAAYgAQyBRAAGIAEMgUQABiABEjEHVAAWKMccAR4AJABAJgBfqAB8ROqAQQwLjIyuAEDyAEA-AEBqAIAwgIOEAAYgAQYigUYsQMYgwHCAggQABiABBixA8ICDxAAGIAEGLEDGIMBGAoYKsICChAAGIAEGLEDGArCAgkQABgBGIAEGArCAgQQABgDwgINEAAYgAQYigUYsQMYQ8ICEBAAGIAEGIoFGLEDGIMBGEPCAgsQABiABBiKBRixA4gGAQ&sclient=gws-wiz-news'
-// const url = 'https://news.sportbox.ru/Vidy_sporta/Volejbol/spbnews_NI1986015_Chempiona_operativno_vernuli_na_rabotu_posle_otstranenija_Ne_proshlo_i_troh_dnej'
 const url = 'https://sportrbc.ru/';
 
 const express = require('express');
@@ -9,7 +7,7 @@ const cheerio = require("cheerio");
 
 const app = express();
 
-var corsOptions = {
+const corsOptions = {
     origin: 'http://localhost:63342',
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
@@ -28,17 +26,12 @@ app.post('/news_by_category', (req, res) => {
     parseNews(req, res, reqUrl)
 })
 
-const port = 3000;
-app.listen(port, () => console.log(`Сервер запущен на порту ${port}`));
-
 function parseNews(req, res, body) {
     let newsUrl = url;
-    if (body) {
-        newsUrl = body
-    }
+    if (body) newsUrl = body
 
     rp(newsUrl)
-        .then(function(html){
+        .then(function (html) {
             const $ = cheerio.load(html);
             const items = [];
             $('.item').each((i, elem) => {
@@ -54,13 +47,52 @@ function parseNews(req, res, body) {
                 let categoryLink = $(elem).find('a.item__category').attr('href');
                 category = category.split(',')[0].trim();
 
-                items.push({ link, image, title, category, categoryLink, date });
+                items.push({link, image, title, category, categoryLink, date});
             });
             res.json(items);
         })
-        .catch(function(err){
+        .catch(function (err) {
             // Обработка ошибки
-            console.error(err);
             res.status(500).send('Произошла ошибка при парсинге страницы');
         });
 }
+
+app.post('/news_details', (req, res) => {
+    try {
+        const link = req.body.link;
+        parseDetailedNews(req, res, link)
+    } catch (err) {
+        res.status(500).send('Произошла ошибка при парсинге страницы');
+    }
+})
+
+function parseDetailedNews(req, res, tempUrl) {
+    rp(tempUrl)
+        .then(function (html) {
+            const $ = cheerio.load(html)
+            const items = [];
+
+            const header = $('.article__header__title-in').text()
+            items.push(header.trim())
+
+            let text = ''
+            $('.article__text').each((i, elem) => {
+                const p = $(elem).find('p').text();
+
+                text += p
+            })
+            items.push(text)
+
+            const image = $('.smart-image__img').attr('src');
+            items.push(image)
+
+            console.log(items)
+            res.json(items);
+        })
+        .catch(function (err) {
+            res.status(500).send('Произошла ошибка при парсинге страницы')
+        })
+}
+
+const port = 3000;
+app.listen(port, () => console.log(`Сервер запущен на порту ${port}`));

@@ -41,14 +41,13 @@ function changePage(page) {
     const news = document.getElementById("tranding_content");
     const page_span = document.getElementById("page");
 
-    // Validate page
     if (page < 1) page = 1;
     if (page > numPages()) page = numPages();
 
     news.innerHTML = "";
 
 
-    for (var i = (page - 1) * RECORDS_PER_PAGE; i < (page * RECORDS_PER_PAGE); i++) {
+    for (let i = (page - 1) * RECORDS_PER_PAGE; i < (page * RECORDS_PER_PAGE); i++) {
         const item = trandingNews[i];
         item.publishedAt = item.publishedAt.substring(0, 10);
         const viewNumber = generateRandomViews();

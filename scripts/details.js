@@ -29,7 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const text = document.createElement('p');
             text.textContent = data[1];
 
-            // const container = document.createElement('div');
             detailsBlock.appendChild(header);
             detailsBlock.appendChild(image);
             detailsBlock.appendChild(text);

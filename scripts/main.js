@@ -1,7 +1,6 @@
 (function ($) {
     "use strict";
     
-    // Dropdown on mouse hover
     $(document).ready(function () {
         function toggleNavbarMethod() {
             if ($(window).width() > 992) {
@@ -19,7 +18,6 @@
     });
     
     
-    // Back to top button
     $(window).scroll(function () {
         if ($(this).scrollTop() > 100) {
             $('.back-to-top').fadeIn('slow');
@@ -33,7 +31,6 @@
     });
 
 
-    // Main News carousel
     $(".main-carousel").owlCarousel({
         autoplay: true,
         smartSpeed: 1500,
@@ -44,7 +41,6 @@
     });
 
 
-    // Tranding carousel
     $(".tranding-carousel").owlCarousel({
         autoplay: true,
         smartSpeed: 2000,
@@ -59,7 +55,6 @@
     });
 
 
-    // Carousel item 1
     $(".carousel-item-1").owlCarousel({
         autoplay: true,
         smartSpeed: 1500,
@@ -73,7 +68,6 @@
         ]
     });
 
-    // Carousel item 2
     $(".carousel-item-2").owlCarousel({
         autoplay: true,
         smartSpeed: 1000,
@@ -99,7 +93,6 @@
     });
 
 
-    // Carousel item 3
     $(".carousel-item-3").owlCarousel({
         autoplay: true,
         smartSpeed: 1000,
@@ -128,7 +121,6 @@
     });
     
 
-    // Carousel item 4
     $(".carousel-item-4").owlCarousel({
         autoplay: true,
         smartSpeed: 1000,

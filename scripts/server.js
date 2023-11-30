@@ -51,8 +51,7 @@ function parseNews(req, res, body) {
             });
             res.json(items);
         })
-        .catch(function (err) {
-            // Обработка ошибки
+        .catch(function () {
             res.status(500).send('Произошла ошибка при парсинге страницы');
         });
 }
